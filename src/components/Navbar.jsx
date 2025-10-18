@@ -34,7 +34,6 @@ export default function Navbar({ openMobileSidebar }) {
         backgroundColor: "#0e1424ff", // elegant dark color
         color: "#fff",
         width: { md: `calc(100% - 240px)` }, // leave space for sidebar on desktop
-        ml: { md: "240px" },
       }}
     >
       <Toolbar>
@@ -44,7 +43,7 @@ export default function Navbar({ openMobileSidebar }) {
           color="inherit"
           aria-label="open drawer"
           onClick={() => openMobileSidebar(true)}
-          sx={{ display: { md: "none" }, mr: 2 }}
+          sx={{ display: { md: "none" }}}
         >
           <MenuIcon />
         </IconButton>
@@ -56,7 +55,7 @@ export default function Navbar({ openMobileSidebar }) {
           component="div"
           sx={{ flexGrow: 1, fontWeight: 600 }}
         >
-         Health Care Management
+         search
         </Typography>
 
         <IconButton color="inherit" sx={{ mr: 2 }}>

@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }) {
   const MotionBox = motion(Box);
 
   return (
-    <Box sx={mainWrapper} className="mainwrapper">
+    <Box sx={mainWrapper}>
       <Sidebar
         isMobileSidebarOpen={isMobileSidebarOpen}
         onSidebarClose={() => setMobileSidebarOpen(false)}

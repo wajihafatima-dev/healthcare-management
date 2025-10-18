@@ -1,8 +1,8 @@
 // pages/_app.js
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Provider } from "react-redux";
-import store from "../store";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import store from "@/redux/store";
 
 function MyApp({ Component, pageProps, router }) {
   const isDashboard = router.pathname.startsWith("/dashboard");

@@ -9,11 +9,13 @@ import "swiper/css/pagination";
 
 const backgroundColors = [
   "#c6c9e7ec",
-  "#a7c0adff",
-  "#b1a392ff",
-  "#c6b1cfff",
+  "#b4d4bbff",
+  "#d8c1a4ff",
+  "#d4c4dbff",
   "#c6c9e7ec",
-  "#a7c0adff",
+  "#b4d4bbff",
+  "#d8c1a4ff",
+  "#d4c4dbff",
 ];
 
 const defaultBreakpoints = {

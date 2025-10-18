@@ -50,7 +50,7 @@ export const componentStyles = {
       letterSpacing: "0.5px",
     },
     navItem: {
-      padding: "0.5rem 1rem",
+      padding: "0.4rem 0.5rem",
       display: "flex",
       cursor: "pointer",
       alignItems: "center",
@@ -68,22 +68,20 @@ export const componentStyles = {
   DashboardLayoutStyle: {
     mainWrapper: {
       display: "flex",
-      minHeight: "100vh",
+      // minHeight: "100vh",
       width: "100%",
-      overflow: "hidden",
+      // overflow: "hidden",
     },
     pageWrapper: {
       display: "flex",
       flexGrow: 1,
-      px:2,
-      flexDirection: "column",
       zIndex: 1,
       overflow: "hidden",
       backgroundColor: "#F5F6FA",
       paddingTop: "70px",
     },
     childrenStyle: (pathname, bgLogo) => ({
-      p: 3,
+      p: 2,
       flexGrow: 1,
       overflowY: "auto",
       backgroundSize: "80%",
