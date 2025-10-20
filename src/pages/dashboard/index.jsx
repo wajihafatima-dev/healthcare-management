@@ -1,33 +1,19 @@
 "use client";
-import React from "react";
-import { Box } from "@mui/material";
-import CardSliderLayout from "@/components/layout/CardSliderLayout";
-import { CARD_SLIDER_DATA } from "@/constant/DashboardConstent";
-import PatientAnalyticsChart from "@/components/PatientAnalyticsChart";
+import { useSelector } from "react-redux";
+import { Box, Typography } from "@mui/material";
+import StaffDashboard from "@/components/dashboard/StaffDashboard";
+import AdminDashboard from "@/components/dashboard/AdminDashboard";
 
-const patientData = [
-  { month: "Jan", patients: 20, appointments: 15 },
-  { month: "Feb", patients: 25, appointments: 18 },
-  { month: "Mar", patients: 30, appointments: 22 },
-  { month: "Apr", patients: 28, appointments: 20 },
-  { month: "May", patients: 35, appointments: 25 },
-  { month: "Jun", patients: 40, appointments: 30 },
-];
-const DashboardPage = () => {
+export default function Dashboard() {
+  const { user } = useSelector((state) => state.auth);
+
   return (
-    <Box
-      sx={{
-        mt: { xs: "0px", md: "20px" },
-        ml: { xs: "0px", md: "20px" },
-        display: "flex",
-        flexDirection: "column",
-        gap: { xs: 5, sm: 3, lg: 3 },
-      }}
-    >
-      <CardSliderLayout data={CARD_SLIDER_DATA} />
-      <PatientAnalyticsChart />
-    </Box>
+        <Box sx={{ flexGrow: 1, p: 3 }}>
+          <Typography variant="h5" mb={2}>
+            Welcome, {user?.name} 👋
+          </Typography>
+          {user?.role === "admin" && <AdminDashboard />}
+          {user?.role === "staff" && <StaffDashboard />}
+        </Box>
   );
-};
-
-export default DashboardPage;
+}

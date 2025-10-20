@@ -17,13 +17,64 @@ export const componentStyles = {
 
     innerBoxStyle: {
       width: "100%",
-      maxWidth: "480px",
+      maxWidth: "500px",
       backgroundColor: "rgba(255, 255, 255, 0.9)",
       borderRadius: "16px",
       boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-      padding: "2rem",
+      padding: "1.5rem",
       backdropFilter: "blur(10px)",
     },
+    authInputStyle: {
+    "& .MuiInputBase-root": {
+      height: { xs: "26px", md: "46px" },
+      border: "1px solid #D8D8D8",
+      backgroundColor: "#F1F4F9",
+      borderRadius: "8px",
+      paddingLeft: "12px",
+      paddingRight: "12px",
+    },
+    "& input": {
+      fontSize: "14px",
+      backgroundColor: "#F1F4F9",
+      color: "#000",
+      "&::placeholder": {
+        color: "#A6A6A6",
+        opacity: 1,
+      },
+    },
+  },
+  authTitleStyle: {
+    textAlign: "center",
+    fontFamily: "Nunito Sans",
+    color: "#202224",
+    fontWeight: 600,
+  },
+  authDescriptionStyle: {
+    textAlign: "center",
+    opacity: "80%",
+    fontFamily: "Nunito Sans",
+    color: "#202224",
+    fontWeight: 500,
+  },
+  authFormStyle: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 1.5,
+  },
+  authLableStyle: {
+    opacity: "80%",
+    fontFamily: "Nunito Sans",
+    color: "#202224",
+    fontWeight: 500,
+  },
+  authForgetTextStyle: {
+    opacity: "80%",
+    fontFamily: "Nunito Sans",
+    color: "#202224",
+    fontWeight: 500,
+  },
   },
 
   // ---------------------------
@@ -120,3 +171,4 @@ export const componentStyles = {
     },
   },
 };
+  

@@ -16,22 +16,22 @@ const AppointmentsPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { list, loading, error } = useSelector((state) => state.appointments);
-  const [formData, setFormData] = useState({
-    doctorName: "",
-    department: "",
-    date: "",
-    time: "",
-    status: "scheduled",
-    notes: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   patientId: "",
+  //   doctorName: "",
+  //   department: "",
+  //   date: "",
+  //   time: "",
+  //   status: "scheduled",
+  //   notes: "",
+  // });
   useEffect(() => {
     dispatch(fetchAppointments());
   }, [dispatch]);
 
-  const handleAdd = (e) => {
-    e.preventDefault();
-    dispatch(createAppointment(formData));
-    router.push("/dashboard/appointments");
+  const handleAdd = (newAppointmentData) => {
+    dispatch(createAppointment(newAppointmentData));
+    router.push("/dashboard/appointments"); 
   };
   const handleDelete = (id) => {
     if (confirm("Delete this appointment?")) {

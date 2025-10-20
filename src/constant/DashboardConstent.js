@@ -2,6 +2,9 @@ import PeopleIcon from "@mui/icons-material/People";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy"
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const CARD_SLIDER_DATA = {
   cardData : [
@@ -43,3 +46,21 @@ export const CARD_SLIDER_DATA = {
     },
   },
 };
+export const ACTION_MENU_ITEMS = [
+    {
+    key: "view",
+    label: "View Details",
+    icon: <VisibilityIcon fontSize="small" />,
+  },
+  {
+    key: "edit",
+    label: "Edit",
+    icon: <EditIcon fontSize="small" />,
+  },
+  {
+    key: "delete",
+    label: "Delete",
+    icon: <DeleteIcon fontSize="small" />,
+  },
+
+  ];

@@ -18,18 +18,15 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  MenuItem as SelectMenuItem,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { motion } from "framer-motion";
+import AppointmentDialog from "./AppointmentDialog";
+import { APPOINTMENT_FORM_FIELDS, APPOINTMENT_INITIAL_STATE, DYNAMIC_PATIENT_LIST } from "@/constant/AppointmentConstent";
+// 1. New Component Import
 
 const statusColors = {
   scheduled: { bg: "#E0E7FF", color: "#4338CA" },
@@ -51,15 +48,7 @@ const DetailsTable = ({
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-
-  const [formData, setFormData] = useState({
-    doctorName: "",
-    department: "",
-    date: "",
-    time: "",
-    status: "scheduled",
-    notes: "",
-  });
+  const [editData, setEditData] = useState(null);
 
   const handleMenuOpen = (event, id) => {
     setAnchorEl(event.currentTarget);
@@ -71,35 +60,31 @@ const DetailsTable = ({
     setSelectedId(null);
   };
 
-  const handleDialogOpen = () => setOpenDialog(true);
+  const handleDialogOpen = () => {
+    setEditData(null); // Ensure data is clear for ADD mode
+    setOpenDialog(true);
+  };
+  
   const handleDialogClose = () => {
     setOpenDialog(false);
-    setFormData({
-      doctorName: "",
-      department: "",
-      date: "",
-      time: "",
-      status: "scheduled",
-      notes: "",
-    });
+    setEditData(null); // Clear edit data on close
   };
 
-    const handleFormChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  // Logic to handle edit action from menu
+  const handleEditAction = (id) => {
+      const itemToEdit = data.find(item => item._id === id);
+      setEditData(itemToEdit);
+      setOpenDialog(true); // Open the dialog with pre-filled data
+      handleMenuClose();
+  }
 
-  const handleFormSubmit = () => {
-    if (
-      !formData.doctorName ||
-      !formData.department ||
-      !formData.date ||
-      !formData.time
-    ) {
-      alert("Please fill all required fields.");
-      return;
-    }
-    onAdd?.(formData);
-    handleDialogClose();
+  // Handle data submission from the dialog (for both ADD and EDIT)
+  const handleDialogSubmit = (formData, isEdit) => {
+      if (isEdit) {
+          onEdit?.(formData); // Assume onEdit handles the update logic
+      } else {
+          onAdd?.(formData); // Assume onAdd handles the creation logic
+      }
   };
 
   return (
@@ -136,13 +121,13 @@ const DetailsTable = ({
             py: 1,
             "&:hover": { backgroundColor: "#16213bff" },
           }}
-          onClick={handleDialogOpen}
+          onClick={handleDialogOpen} // Open in ADD mode
         >
           {btnText}
         </Button>
       </Box>
 
-      {/* Table */}
+      {/* Table (The rest of the table logic remains the same) */}
       <TableContainer
         component={Paper}
         sx={{
@@ -176,7 +161,6 @@ const DetailsTable = ({
               ))}
             </TableRow>
           </TableHead>
-
           <TableBody>
             {data.length > 0 ? (
               data.map((row, index) => (
@@ -187,19 +171,14 @@ const DetailsTable = ({
                   transition={{ delay: index * 0.05 }}
                 >
                   <TableCell>{row._id || "N/A"}</TableCell>
-
                   <TableCell>
                     <Box display="flex" alignItems="center" gap={1.5}>
-                      <Avatar
-                        src={row.patient?.image || ""}
-                        alt={row.patient?.name || "Patient"}
-                      />
+                      <Avatar src={row.patient?.image || ""} alt={row.patient?.name || "Patient"} />
                       <Typography fontWeight={500}>
                         {row.patient?.name || "N/A"}
                       </Typography>
                     </Box>
                   </TableCell>
-
                   <TableCell>
                     <Typography
                       sx={{
@@ -215,13 +194,10 @@ const DetailsTable = ({
                       {row.doctorName || "N/A"}
                     </Typography>
                   </TableCell>
-
                   <TableCell>{row.department || "N/A"}</TableCell>
-
                   <TableCell>
                     {new Date(row.date).toLocaleDateString()} {row.time || ""}
                   </TableCell>
-
                   <TableCell>
                     <Chip
                       label={row.status || "Unknown"}
@@ -239,7 +215,6 @@ const DetailsTable = ({
                       }}
                     />
                   </TableCell>
-
                   <TableCell align="right">
                     <IconButton onClick={(e) => handleMenuOpen(e, row._id)}>
                       <MoreVertIcon />
@@ -259,6 +234,7 @@ const DetailsTable = ({
           </TableBody>
         </Table>
       </TableContainer>
+
 
       {/* Menu */}
       <Menu
@@ -281,10 +257,7 @@ const DetailsTable = ({
         </MenuItem>
 
         <MenuItem
-          onClick={() => {
-            onEdit?.(selectedId);
-            handleMenuClose();
-          }}
+          onClick={() => handleEditAction(selectedId)} // Call the new edit handler
         >
           <ListItemIcon>
             <EditIcon fontSize="small" />
@@ -305,94 +278,16 @@ const DetailsTable = ({
         </MenuItem>
       </Menu>
 
-      {/* Add Appointment Dialog */}
-      <Dialog open={openDialog} onClose={handleDialogClose} fullWidth maxWidth="sm">
-        <DialogTitle>Add Appointment</DialogTitle>
-        <DialogContent
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            mt: 1,
-          }}
-        >
-          <TextField
-            label="Doctor Name"
-            name="doctorName"
-            value={formData.doctorName}
-            onChange={handleFormChange}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Department"
-            name="department"
-            value={formData.department}
-            onChange={handleFormChange}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Date"
-            name="date"
-            type="date"
-            value={formData.date}
-            onChange={handleFormChange}
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            required
-          />
-          <TextField
-            label="Time"
-            name="time"
-            type="time"
-            value={formData.time}
-            onChange={handleFormChange}
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            required
-          />
-          <TextField
-            select
-            label="Status"
-            name="status"
-            value={formData.status}
-            onChange={handleFormChange}
-            fullWidth
-          >
-            <SelectMenuItem value="scheduled">Scheduled</SelectMenuItem>
-            <SelectMenuItem value="completed">Completed</SelectMenuItem>
-            <SelectMenuItem value="cancelled">Cancelled</SelectMenuItem>
-            <SelectMenuItem value="upcoming">Upcoming</SelectMenuItem>
-          </TextField>
-          <TextField
-            label="Notes"
-            name="notes"
-            value={formData.notes}
-            onChange={handleFormChange}
-            fullWidth
-            multiline
-            rows={3}
-          />
-        </DialogContent>
-
-        <DialogActions sx={{ p: 2 }}>
-          <Button onClick={handleDialogClose} color="secondary">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleFormSubmit}
-            variant="contained"
-            type="submit"
-            sx={{
-              backgroundColor: "#203055ff",
-              "&:hover": { backgroundColor: "#16213bff" },
-            }}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {/* 2. Separated Dialog Component */}
+<AppointmentDialog
+    open={openDialog}
+    onClose={handleDialogClose}
+    onSubmit={handleDialogSubmit}
+    initialData={editData} 
+    initialFormState={APPOINTMENT_INITIAL_STATE}
+    patientList={DYNAMIC_PATIENT_LIST}
+    formFields={APPOINTMENT_FORM_FIELDS} // <-- The new dynamic fields constant
+/>
     </Box>
   );
 };

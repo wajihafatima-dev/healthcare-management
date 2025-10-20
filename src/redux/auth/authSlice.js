@@ -1,50 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { authApi } from "../../services/authApi";
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem("user")) || null,
-  redirectToLogin: false,
+  user: typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user")) : null,
+  token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
 };
 
-const slice = createSlice({
+const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    setCredentials: (state, { payload }) => {
+      state.user = payload.user;
+      state.token = payload.token;
+      localStorage.setItem("user", JSON.stringify(payload.user));
+      localStorage.setItem("token", payload.token);
+    },
     logout: (state) => {
       state.user = null;
+      state.token = null;
       localStorage.clear();
     },
-    setRedirectToLogin: (state, action) => {
-      state.redirectToLogin = action.payload;
-    },
-  },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      authApi.endpoints.getUserWithToken.matchFulfilled,
-      (state, { payload }) => {
-        state.user = payload;
-        localStorage.setItem("user", JSON.stringify(payload));
-      }
-    );
-    builder.addMatcher(
-      authApi.endpoints.updateUser.matchFulfilled,
-      (state, { payload }) => {
-        const { updated } = payload;
-
-        state.user = {
-          ...state.user,
-          profile: {
-            ...state.user?.profile,
-            ...updated, 
-          },
-        };
-
-        localStorage.setItem("user", JSON.stringify(state.user));
-      }
-    );
   },
 });
 
-export const { logout, setRedirectToLogin } = slice.actions;
-
-export default slice.reducer;
+export const { setCredentials, logout } = authSlice.actions;
+export default authSlice.reducer;
